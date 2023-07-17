@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html xml:lang="fr" lang="fr">
+   	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Canvas bulles</title>
+        <meta content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+			@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,900&display=swap');
+
+		 	header {
+				background: #A0CAFF;
+				padding: 3%;
+				text-align: center;
+				color: #D3FAFF;
+				font-size: x-large;
+				letter-spacing: 5px;
+				position: relative;
+				z-index: 1;
+			}
+
+			h1 {
+				font-family: 'Exo 2', sans-serif;
+				font-size: 6.5vw;
+				color: white;
+				padding: 3rem 0;
+				text-shadow: 0px 4px 48px rgba(255,255,255,0.2);
+			}
+
+			#bubulles {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				z-index: 2;
+			}
+		</style>
+   	</head>
+
+   <body>
+      	<header id="header">
+			<canvas id="bubulles"></canvas>
+			<u><h1>Canvas bulles</h1></u>
+      	</header>
+      
+      	<script>
+         	function updateBubullesPositions() {
+				var canvas = document.getElementById("bubulles");
+				var parent = document.getElementById("header");
+				var ctx = canvas.getContext('2d');
+
+				canvas.width = parent.offsetWidth;
+				canvas.height = parent.offsetHeight;
+
+				const offsetY = 10; 
+
+				var bubullesTab = []; 
+
+				function creerBubulles(offsetY) {
+					var x = Math.random() * canvas.width; 
+					var y = canvas.height + offsetY; 
+					var bubullesRayon = ((Math.random() * 100) % 50) + 3; 
+					var bubullesVitesse = ((Math.random() * 100) % 4) + 1; 
+
+					var bubulle = {
+						x: x,
+						y: y,
+						bubullesRayon: bubullesRayon,
+						bubullesVitesse: bubullesVitesse
+					};
+
+					bubullesTab.push(bubulle);
+				}
+
+				function drawBubble(bubulle) {
+					ctx.beginPath();
+					ctx.arc(bubulle.x, bubulle.y, bubulle.bubullesRayon, 0, 2 * Math.PI, false);
+					ctx.strokeStyle = "rgb(255, 255, 255, 0.3)";
+					ctx.fillStyle = "rgb(255, 255, 255, 0.1)";
+					ctx.stroke();
+					ctx.fill();
+				}
+
+				for (let i = 0; i < 12; i++) {
+				creerBubulles(i * offsetY);
+				}
+
+				function animateBubulles() {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+				for (var i = 0; i < bubullesTab.length; i++) {
+					const bubulle = bubullesTab[i];
+
+					bubulle.y -= bubulle.bubullesVitesse; 
+
+					if (bubulle.y + bubulle.bubullesRayon < 0) {
+						bubulle.y = canvas.height + offsetY; 
+					}
+
+					drawBubble(bubulle);
+				}
+
+				requestAnimationFrame(animateBubulles);
+				}
+
+				animateBubulles();
+         	}
+
+         	updateBubullesPositions();
+      	</script>
+   	</body>
+</html>
